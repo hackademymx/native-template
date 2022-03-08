@@ -4,58 +4,90 @@ import axios from "axios";
 
 import React from "react";
 
-import { MyContext } from "../../App";
+import { useIsFocused } from "@react-navigation/native";
 
 const VistaGeneral = ({ navigation }) => {
-  const { usuarios, deleteData } = React.useContext(MyContext);
+  const [listaUsuarios, setListaUsuarios] = React.useState([]);
+
+  const isFocused = useIsFocused();
+
+  const [reload, setReload] = React.useState(false);
+
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    traerInformacion();
-  }, []);
+    if (isFocused) {
+      traerInformacion();
+    }
+  }, [isFocused, reload]);
 
   const traerInformacion = async () => {
-    /*   const response = await axios.get(
-            "https://9bea-45-6-63-88.ngrok.io/api/user"
-          );
-          console.log(response); */
+    setIsLoading(true);
+    try {
+      const { data } = await axios.get("http://18.206.223.131/api/user");
+      setListaUsuarios(data);
+    } catch (error) {
+      //mostrar mensaje de error: ejemplo
+      alert("Ocurrió un error tratando de obtener la información del servidor");
+    }
+    setIsLoading(false);
   };
 
-  const eliminarElemento = async (idx) => {
-    /* const response = await axios.delete(`url/users/${id}`) */
-    deleteData(idx);
+  const eliminarElemento = async (id) => {
+    try {
+      await axios.delete(`http://18.206.223.131/api/user/${id}`);
+      setReload(!reload);
+      alert("se ha eliminado el usuario con éxito");
+    } catch (error) {
+      alert("error al tratar de eliminar el usuario");
+    }
   };
+
+  if (isLoading) {
+    return (
+      <View>
+        <Text>Cargando...</Text>
+      </View>
+    );
+  }
 
   return (
     <View>
-      {usuarios.map((usuario, idx) => {
-        return (
-          <View key={`usuario-${idx}`} style={styles.usuario}>
-            <Text>{usuario.name}</Text>
-            <Text>{usuario.email}</Text>
-            <Text>{usuario.age}</Text>
-            <TouchableOpacity>
-              <Text
-                onPress={() => eliminarElemento(idx)}
-                style={styles.eliminar}
-              >
-                Eliminar
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text
-                onPress={() =>
-                  navigation.navigate("Vista Actualizar", {
-                    itemId: idx,
-                  })
-                }
-                style={styles.actualizar}
-              >
-                Actualizar
-              </Text>
-            </TouchableOpacity>
-          </View>
-        );
-      })}
+      {listaUsuarios.length === 0 ? (
+        <View>
+          <Text>No hay datos actualmente en la base de datos</Text>
+        </View>
+      ) : (
+        listaUsuarios.map((usuario, idx) => {
+          return (
+            <View key={`usuario-${idx}`} style={styles.usuario}>
+              <Text>{usuario.name}</Text>
+              <Text>{usuario.email}</Text>
+              <Text>{usuario.age}</Text>
+              <TouchableOpacity>
+                <Text
+                  onPress={() => eliminarElemento(usuario.id)}
+                  style={styles.eliminar}
+                >
+                  Eliminar
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text
+                  onPress={() =>
+                    navigation.navigate("Vista Actualizar", {
+                      itemId: usuario.id,
+                    })
+                  }
+                  style={styles.actualizar}
+                >
+                  Actualizar
+                </Text>
+              </TouchableOpacity>
+            </View>
+          );
+        })
+      )}
       <Button
         title="Crear"
         onPress={() => navigation.navigate("Vista Crear")}

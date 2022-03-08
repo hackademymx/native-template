@@ -1,7 +1,5 @@
 import { View, Text, TextInput, StyleSheet, Button } from "react-native";
 
-import { MyContext } from "../../App";
-
 import axios from "axios";
 
 import React from "react";
@@ -12,12 +10,10 @@ const initialState = {
   age: "",
 };
 
-const VistaActualizar = ({ route }) => {
+const VistaActualizar = ({ route, navigation }) => {
   const [user, setUser] = React.useState(initialState);
+  const [loading, setLoading] = React.useState(false);
   const { itemId } = route.params;
-  const { usuarios, putData } = React.useContext(MyContext);
-
-  console.log(user);
 
   const ChangeUserInputs = (propiedad, value) => {
     setUser({
@@ -27,11 +23,29 @@ const VistaActualizar = ({ route }) => {
   };
 
   React.useEffect(() => {
-    setUser(usuarios[itemId]);
+    getUserData();
   }, []);
 
-  const PUTDATA = () => {
-    putData(user, itemId);
+  const getUserData = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://18.206.223.131/api/user/${itemId}`
+      );
+      setUser(data);
+    } catch (error) {
+      alert("ocurrió un error tratando de obtener la información del usuario");
+    }
+  };
+
+  const PUTDATA = async () => {
+    try {
+      setLoading(true);
+      await axios.put(`http://18.206.223.131/api/user/${itemId}`, user);
+      navigation.goBack();
+    } catch (error) {
+      alert("ocurrió un error tratando de actualizar el usuario");
+    }
+    setLoading(false);
   };
 
   return (
@@ -55,7 +69,10 @@ const VistaActualizar = ({ route }) => {
         onChangeText={(text) => ChangeUserInputs("age", text)}
       />
 
-      <Button title="Confirmar" onPress={PUTDATA} />
+      <Button
+        title={loading ? "Cargando..." : "Actualizar"}
+        onPress={PUTDATA}
+      />
     </View>
   );
 };

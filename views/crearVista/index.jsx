@@ -3,7 +3,6 @@ import React from "react";
 
 import axios from "axios";
 
-import { MyContext } from "../../App";
 
 const initialState = {
   name: "",
@@ -13,7 +12,6 @@ const initialState = {
 
 const VistaCrear = () => {
   const [user, setUser] = React.useState(initialState);
-  const { postData } = React.useContext(MyContext);
 
   const ChangeUserInputs = (propiedad, value) => {
     setUser({
@@ -23,13 +21,7 @@ const VistaCrear = () => {
   };
 
   const postUser = async () => {
-    /*   await axios.post("url-de-destino", user, {
-      headers: {
-        token: "asldkfjalskdfs",
-      },
-    }); */
-
-    postData(user);
+    await axios.post("http://18.206.223.131/api/user", user);
     setUser(initialState);
   };
 

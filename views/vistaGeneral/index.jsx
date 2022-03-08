@@ -1,16 +1,12 @@
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
 
 import axios from "axios";
 
-import { obtenerUsuarios } from "../../api";
-
 import React from "react";
-import { TouchableOpacity } from "react-native-web";
 
 import { MyContext } from "../../App";
 
 const VistaGeneral = ({ navigation }) => {
-  const [informacion, setInformacion] = React.useState([]);
   const { usuarios, deleteData } = React.useContext(MyContext);
 
   React.useEffect(() => {

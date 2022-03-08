@@ -29,7 +29,7 @@ const VistaGeneral = ({ navigation }) => {
     <View>
       {usuarios.map((usuario, idx) => {
         return (
-          <View style={styles.usuario}>
+          <View key={`usuario-${idx}`} style={styles.usuario}>
             <Text>{usuario.name}</Text>
             <Text>{usuario.email}</Text>
             <Text>{usuario.age}</Text>

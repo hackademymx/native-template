@@ -12,10 +12,12 @@ const initialState = {
   age: "",
 };
 
-const VistaActualizar = ({ route, navigation }) => {
+const VistaActualizar = ({ route }) => {
   const [user, setUser] = React.useState(initialState);
   const { itemId } = route.params;
   const { usuarios, putData } = React.useContext(MyContext);
+
+  console.log(user);
 
   const ChangeUserInputs = (propiedad, value) => {
     setUser({
@@ -49,7 +51,7 @@ const VistaActualizar = ({ route, navigation }) => {
       <Text>Edad</Text>
       <TextInput
         style={styles.textInput}
-        value={user.age}
+        value={user.age.toString()}
         onChangeText={(text) => ChangeUserInputs("age", text)}
       />
 

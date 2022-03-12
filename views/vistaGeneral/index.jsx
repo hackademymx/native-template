@@ -20,7 +20,7 @@ const VistaGeneral = ({ navigation }) => {
       traerInformacion();
     }
   }, [isFocused, reload]);
-
+  //Soy un comentario de prueba en una rama
   const traerInformacion = async () => {
     setIsLoading(true);
     try {

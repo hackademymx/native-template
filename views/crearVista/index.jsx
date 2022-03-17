@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, Button } from "react-native";
+import { View, Text, TextInput, StyleSheet, Button, AsyncStorage } from "react-native";
 import React from "react";
 
 import axios from "axios";
@@ -21,8 +21,16 @@ const VistaCrear = () => {
   };
 
   const postUser = async () => {
-    await axios.post("http://18.206.223.131/api/user", user);
-    setUser(initialState);
+    try {
+      const {data} = await axios({
+        method: 'post',
+        baseURL: 'http://18.206.223.131/api',
+        url: '/user',
+        data: user,
+      })
+    } catch (error) {
+      alert(`ocurrió un error en la aplicación : ${error}`)
+    }
   };
 
   return (

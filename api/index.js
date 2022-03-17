@@ -1,25 +1,10 @@
-const array = [
-  {
-    name: "Jesús",
-    email: "jesus@example.com",
-    age: 22,
-  },
-  {
-    name: "María",
-    email: "María@example.com",
-    age: 21,
-  },
-  {
-    name: "Chester",
-    email: "chester@example.com",
-    age: 3,
-  },
-];
+import axios from "axios";
 
-export const crearUsuario = (user) => {
-  array.push(user);
-};
-
-export const obtenerUsuarios = () => {
-  return array;
-};
+export const miserver = ({method, url, data,}) => {
+  return axios({
+    method,
+    baseURL: 'http://18.206.223.131/api',
+    url,
+    data,
+  })
+}

@@ -1,8 +1,8 @@
 import { View, Text, TextInput, StyleSheet, Button } from "react-native";
 
-import axios from "axios";
-
 import React from "react";
+
+import { miserver } from "../../api";
 
 const initialState = {
   name: "",
@@ -28,9 +28,7 @@ const VistaActualizar = ({ route, navigation }) => {
 
   const getUserData = async () => {
     try {
-      const { data } = await axios.get(
-        `http://18.206.223.131/api/user/${itemId}`
-      );
+      const { data } = await  miserver({method: 'GET', url:`/user/${itemId}`});
       setUser(data);
     } catch (error) {
       alert("ocurrió un error tratando de obtener la información del usuario");
@@ -40,7 +38,7 @@ const VistaActualizar = ({ route, navigation }) => {
   const PUTDATA = async () => {
     try {
       setLoading(true);
-      await axios.put(`http://18.206.223.131/api/user/${itemId}`, user);
+      await  miserver({method: 'PUT', url: `user/${itemId}`, data: user}); 
       navigation.goBack();
     } catch (error) {
       alert("ocurrió un error tratando de actualizar el usuario");

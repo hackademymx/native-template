@@ -1,14 +1,19 @@
-import { View, Text, Button, StyleSheet, TouchableOpacity, Image, } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 
 import React from "react";
 
 import { useIsFocused } from "@react-navigation/native";
 
-
 import { miserver } from "../../api";
 
-const ImagenPrincipal = require('../../assets/imagencita.jpg');
-
+const ImagenPrincipal = require("../../assets/imagencita.jpg");
 
 const VistaGeneral = ({ navigation }) => {
   const [listaUsuarios, setListaUsuarios] = React.useState([]);
@@ -28,7 +33,7 @@ const VistaGeneral = ({ navigation }) => {
   const traerInformacion = async () => {
     setIsLoading(true);
     try {
-      const {data} = await miserver({method: 'GET', url: '/user'});
+      const { data } = await miserver({ method: "GET", url: "/user" });
       setListaUsuarios(data);
     } catch (error) {
       //mostrar mensaje de error: ejemplo
@@ -39,7 +44,7 @@ const VistaGeneral = ({ navigation }) => {
 
   const eliminarElemento = async (id) => {
     try {
-      await miserver({method: 'DELETE', url: `user/${id}`})
+      await miserver({ method: "DELETE", url: `user/${id}` });
       setReload(!reload);
       alert("se ha eliminado el usuario con éxito");
     } catch (error) {
@@ -47,17 +52,17 @@ const VistaGeneral = ({ navigation }) => {
     }
   };
 
-  if (isLoading) {
+  if (true) {
     return (
       <View>
-        <Text>Cargando...</Text>
+        <Text>Hola mundo, estamos trabajando desde otra rama</Text>
       </View>
     );
   }
 
   return (
     <View>
-      <Image style={styles.image} source={ImagenPrincipal}/>
+      <Image style={styles.image} source={ImagenPrincipal} />
       {listaUsuarios.length === 0 ? (
         <View>
           <Text>No hay datos actualmente en la base de datos</Text>
@@ -131,7 +136,7 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-  }
+  },
 });
 
 export default VistaGeneral;
